@@ -2,13 +2,15 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
+apply plugin: 'maven-publish'
+
 //apply plugin: 'com.novoda.bintray-release'
 
 buildscript {
     apply from: '../versions.gradle'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_tools_version"
@@ -50,6 +52,9 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
+
+    namespace 'com.tonyodev.fetchmigrator'
+
 }
 
 dependencies {
@@ -73,6 +78,13 @@ dependencies {
 //    website = 'https://github.com/tonyofrancis/fetch'
 //}
 
-tasks.withType(Javadoc).all {
-    enabled = false
+
+ext {
+    releaseName = 'tonyofrancis-fetch'
+    releaseDescription = 'Migration Assistant for Fetch'
+    releaseGroupId = 'androidx.tonyodev.fetchmigrator'
+    releaseArtifactId = 'xfetchmigrator'
+    releaseVersion = library_version
 }
+
+apply from: '../publish_config.gradle'

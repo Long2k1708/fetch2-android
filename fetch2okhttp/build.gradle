@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
 
 //apply plugin: 'com.novoda.bintray-release'
 
@@ -8,7 +9,7 @@ buildscript {
     apply from: '../versions.gradle'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_tools_version"
@@ -26,6 +27,7 @@ android {
         targetSdkVersion library_target_version
         versionCode library_version_code
         versionName library_version
+        buildToolsVersion = library_build_tools_version
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -48,14 +50,17 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
+
+    namespace 'com.tonyodev.fetch2okhttp'
+
 }
 
 dependencies {
@@ -71,15 +76,12 @@ dependencies {
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
 }
 
-//publish {
-//    userOrg = 'tonyofrancis'
-//    groupId = 'com.tonyodev.fetch2okhttp'
-//    artifactId = 'fetch2okhttp'
-//    publishVersion = library_version
-//    desc = 'OkHttp Downloader for Fetch2'
-//    website = 'https://github.com/tonyofrancis/fetch'
-//}
-
-tasks.withType(Javadoc).all {
-    enabled = false
+ext {
+    releaseName = 'tonyofrancis-fetch'
+    releaseDescription = 'OkHttp Downloader for Fetch2'
+    releaseGroupId = 'androidx.tonyodev.fetch2okhttp'
+    releaseArtifactId = 'xfetch2okhttp'
+    releaseVersion = library_version
 }
+
+apply from: '../publish_config.gradle'
